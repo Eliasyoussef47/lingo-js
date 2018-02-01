@@ -30,17 +30,17 @@ body {
 }
 
 th.rowTitle {
-    height: 5vw;
-    width: 10vw;
-    margin: 0.2vw 0vw;
+    height: 100px;
+    width: 162px;
+    /* margin: 0.2vw 0vw; */
     /* margin-right: 3vw; */
     border-radius: 5px;
     position:  absolute;
-    left: -10vw;
+    left: -187px;
     align-items:  center;
     justify-content:  center;
     display: flex;
-    font-size: 1.5vw;
+    font-size: 33px;
     text-transform: uppercase;
     border: 1px solid transparent;
     /* border: none; */
@@ -48,12 +48,12 @@ th.rowTitle {
 }
 
 .tryRowLetterInput, .answerLetterInput {
-    width: 5vw;
-    height: 5vw;
+    width: 100px;
+    height: 100px;
     border-radius:  5px;
     display: inline-flex;
     margin: 0.1vw 0.1vw;
-    font-size: 4vw;
+    font-size: 90px;
     /* border: 1px solid black; */
     text-transform: uppercase;
     box-sizing:  border-box;
