@@ -4,6 +4,7 @@ console.log(chosenWord);
 var splitChosenWord;
 var attempt;
 var splitAttempt;
+var rl = [];
 var table = document.getElementsByTagName("table")[0];
 var tryRow1Letter1Input = document.getElementById("tryRow1Letter1Input");
 var tryRow1Letter2Input = document.getElementById("tryRow1Letter2Input");
@@ -37,17 +38,21 @@ var answerLetter3Input = document.getElementById("answerLetter3Input");
 var answerLetter4Input = document.getElementById("answerLetter4Input");
 var answerLetter5Input = document.getElementById("answerLetter5Input");
 var submitAttempt = document.getElementById("submitAttempt");
+var reset = document.getElementById("reset");
 var row1 = [tryRow1Letter1Input, tryRow1Letter2Input, tryRow1Letter3Input, tryRow1Letter4Input, tryRow1Letter5Input];
 var row2 = [tryRow2Letter1Input, tryRow2Letter2Input, tryRow2Letter3Input, tryRow2Letter4Input, tryRow2Letter5Input];
 var row3 = [tryRow3Letter1Input, tryRow3Letter2Input, tryRow3Letter3Input, tryRow3Letter4Input, tryRow3Letter5Input];
 var row4 = [tryRow4Letter1Input, tryRow4Letter2Input, tryRow4Letter3Input, tryRow4Letter4Input, tryRow4Letter5Input];
 var row5 = [tryRow5Letter1Input, tryRow5Letter2Input, tryRow5Letter3Input, tryRow5Letter4Input, tryRow5Letter5Input];
 var rows = [row1, row2, row3, row4, row5];
-usingRowNumber = 0;
 for (var i = 0; i <= 4; i++) {
 	rows[i][0].placeholder = chosenWord[0];
 }
-var usingRowNumber; //i can change this by using event.target
+for (var i = 0; i <= 4; i++) {
+	rows[i][0].value = chosenWord.charAt(0);
+}
+var usingRowNumber;
+usingRowNumber = 0;
 table.onkeydown = function (e) {
 	var target = e.srcElement || e.target;
 	var maxLength = target.maxLength;
@@ -69,17 +74,17 @@ table.onkeydown = function (e) {
 		}
 	}
 	if (event.keyCode === 13 && rows[usingRowNumber][0].value.length >= 1 && rows[usingRowNumber][1].value.length >= 1 && rows[usingRowNumber][2].value.length >= 1 && rows[usingRowNumber][3].value.length >= 1 && rows[usingRowNumber][4].value.length >= 1) {
-		document.getElementById('submitAttempt').click();
+		combineAttemptLettersAndCompareWithChosenWord();
 	}
 	//	if (target === rows[usingRowNumber][0]) {
 	//		rows[usingRowNumber][0].value = chosenWord.charAt(0);
 	//	}
 };
-for (var i = 0; i <= 4; i++) {
-	rows[i][0].value = chosenWord.charAt(0);
-}
 submitAttempt.onclick = function () {
 	combineAttemptLettersAndCompareWithChosenWord();
+};
+reset.onclick = function () {
+	resetGame();
 };
 function combineAttemptLettersAndCompareWithChosenWord() {
 	attempt = "";
@@ -89,6 +94,7 @@ function combineAttemptLettersAndCompareWithChosenWord() {
 	if (attempt.toLowerCase() === chosenWord) {
 		for (i = 0; i <= 4; i++) {
 			rows[usingRowNumber][i].style.backgroundColor = "#fb5454";
+			rows[usingRowNumber][i].disabled = true;
 		}
 		answerLetter1Input.value = chosenWord[0];
 		answerLetter2Input.value = chosenWord[1];
@@ -102,6 +108,7 @@ function combineAttemptLettersAndCompareWithChosenWord() {
 	}
 }
 var repeatedLettersCount = 0;
+
 function comparSplitWordsRow() {
 	for (var i = 0; i <= 4; i++) {
 		if (splitAttempt[i].toLowerCase() === splitChosenWord[i]) {
@@ -113,6 +120,7 @@ function comparSplitWordsRow() {
 					if (rows[usingRowNumber][n].value === splitAttempt[i]) {
 						rows[usingRowNumber][n].style.backgroundColor = "#becfd6";
 						rows[usingRowNumber][n].style.borderRadius = "5px";
+						rows[usingRowNumber][n].disabled = true;
 					}
 				}
 				repeatedLettersCount--;
@@ -130,12 +138,12 @@ function comparSplitWordsRow() {
 				rows[usingRowNumber][i].style.borderRadius = "100%";
 				rows[usingRowNumber][i].disabled = true;
 				if (rows[usingRowNumber][x].value === rows[usingRowNumber][i].value) {
-						//console.log(rows[usingRowNumber][i].value + " - multiple letters detected");
-						rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
-						rows[usingRowNumber][i].style.borderRadius = "100%";
-						rows[usingRowNumber][i].disabled = true;
-						break;
-					}
+					//console.log(rows[usingRowNumber][i].value + " - multiple letters detected");
+					rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
+					rows[usingRowNumber][i].style.borderRadius = "100%";
+					rows[usingRowNumber][i].disabled = true;
+					break;
+				}
 			} else {
 				for (; x >= 0; x--) {
 					if (rows[usingRowNumber][x].value === rows[usingRowNumber][i].value) {
@@ -163,6 +171,7 @@ function comparSplitWordsRow() {
 	}
 	startNewRow();
 }
+
 function startNewRow() {
 	usingRowNumber++;
 	if (usingRowNumber === 5) {
@@ -175,8 +184,69 @@ function startNewRow() {
 	} else {
 		for (var i = 0; i <= 4; i++) {
 			rows[usingRowNumber][i].disabled = false;
+			rows[usingRowNumber][i].style.backgroundColor = "#becfd6";
+			rows[usingRowNumber][0].style.backgroundColor = "#fb5454";
 			rows[usingRowNumber][1].focus();
 		}
 	}
 
 }
+
+//reset
+function resetGame() {
+	answerLetter1Input.value = "";
+	answerLetter2Input.value = "";
+	answerLetter3Input.value = "";
+	answerLetter4Input.value = "";
+	answerLetter5Input.value = "";
+	usingRowNumber--;
+	var rowReset;
+	var cellReset;
+	for (rowReset = 4; rowReset >= 0; rowReset--) {
+		for (cellReset = 4; cellReset >= 0; cellReset--) {
+			rows[rowReset][cellReset].value = "";
+		}
+	}
+
+	for (rowReset = 4; rowReset >= 0; rowReset--) {
+		for (cellReset = 4; cellReset >= 0; cellReset--) {
+			if (cellReset === 0) {
+				rows[rowReset][cellReset].disabled = true;
+				rows[rowReset][cellReset].style.borderRadius = "5px";
+				if (rowReset === 0) {
+					rows[rowReset][cellReset].style.backgroundColor = "#fb5454";
+					rows[rowReset][cellReset].style.borderRadius = "5px";
+				} else {
+					rows[rowReset][cellReset].style.backgroundColor = "#8a2d2d";
+					rows[rowReset][cellReset].style.borderRadius = "5px";
+				}
+			} else if (rowReset === 0) {
+				rows[rowReset][cellReset].disabled = false;
+				rows[rowReset][cellReset].style.backgroundColor = "#becfd6";
+				rows[rowReset][cellReset].style.borderRadius = "5px";
+			} else {
+				rows[rowReset][cellReset].disabled = true;
+				rows[rowReset][cellReset].style.backgroundColor = "#585e61";
+				rows[rowReset][cellReset].style.borderRadius = "5px";
+				rows[rowReset][cellReset].style.borderRadius = "5px";
+			}
+		}
+	}
+	chosenWord = words[Math.floor(Math.random() * words.length)];
+	console.log(chosenWord);
+	for (cellReset = 0; cellReset <= 4; cellReset++) {
+		rows[cellReset][0].placeholder = chosenWord[0];
+	}
+	for (cellReset = 0; cellReset <= 4; cellReset++) {
+		rows[cellReset][0].value = chosenWord[0];
+	}
+	usingRowNumber = 0;
+}
+
+//var rl = [];
+//for (var r = 0; r <= 4; r++) {
+//	if (chosenWord.split(chosenWord[r]).length >= 3) {
+//		rl.push(chosenWord[r]);
+//	}
+//}
+
