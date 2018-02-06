@@ -122,7 +122,7 @@ function comparSplitWordsRow() {
 			rows[usingRowNumber][i].style.backgroundColor = "#fb5454";
 			rows[usingRowNumber][i].disabled = true;
 			var n = rows[usingRowNumber].indexOf(rows[usingRowNumber][i].parentElement.previousElementSibling.firstElementChild);
-			if (repeatedLettersCount > 0) {
+			if (rl.includes(splitAttempt[i])) {
 				for (; n > 0; n--) {
 					if (rows[usingRowNumber][n].value === splitAttempt[i]) {
 						rows[usingRowNumber][n].style.backgroundColor = "#becfd6";
@@ -133,7 +133,7 @@ function comparSplitWordsRow() {
 				repeatedLettersCount--;
 				delete rl[rl.indexOf(splitAttempt[i])];
 			}
-		} else if (splitChosenWord.includes(splitAttempt[i].toLowerCase())) {
+		} else if (splitChosenWord.includes(splitAttempt[i].toLowerCase()) && rl.includes(splitAttempt[i])) {
 			for (var k = 0; k <= 4; k++) {
 				if (chosenWord.split(chosenWord[k]).length >= 3) {
 					//console.log(chosenWord[k]);
@@ -141,12 +141,12 @@ function comparSplitWordsRow() {
 				}
 			}
 			var x = rows[usingRowNumber].indexOf(rows[usingRowNumber][i].parentElement.previousElementSibling.firstElementChild);
-			if (repeatedLettersCount > 0) {
+			if (repeatedLettersCount > 0 && rl.includes(splitAttempt[i])) {
 				rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
 				rows[usingRowNumber][i].style.borderRadius = "100%";
 				rows[usingRowNumber][i].disabled = true;
 				delete rl[rl.indexOf(splitAttempt[i])];
-				if (rows[usingRowNumber][x].value === rows[usingRowNumber][i].value) {
+				if (rows[usingRowNumber][x].value === rows[usingRowNumber][i].value && rl.includes(splitAttempt[i])) {
 					//console.log(rows[usingRowNumber][i].value + " - multiple letters detected");
 					rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
 					rows[usingRowNumber][i].style.borderRadius = "100%";
@@ -163,7 +163,7 @@ function comparSplitWordsRow() {
 						rows[usingRowNumber][i].style.borderRadius = "5px";
 						rows[usingRowNumber][i].disabled = true;
 						break;
-					} else if (splitChosenWord.includes(splitAttempt[i].toLowerCase())) {
+					} else if (splitChosenWord.includes(splitAttempt[i].toLowerCase()) && rl.includes(splitAttempt[i])) {
 						//console.log(rows[usingRowNumber][i].value + " - no multiple letters detected");
 						rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
 						rows[usingRowNumber][i].style.borderRadius = "100%";
