@@ -95,16 +95,11 @@ tr#answer {
 }
 
 #buttonsContainer {
-	
-/* position:  relative; */
-	
-display: flex;
-	
-width: 40%;
-	
-margin-top: 150px;
-	
-justify-content: space-evenly;
+	/* position:  relative; */
+	display: flex;
+	width: 529px;
+	margin-top: 150px;
+	justify-content: space-evenly;
 }
 
 button#submitAttempt, #reset {

@@ -1,11 +1,69 @@
 /* global words*/
 var chosenWord = words[Math.floor(Math.random() * words.length)];
 console.log(chosenWord);
-var splitChosenWord;
+var chosenWordCopy = chosenWord.split("");
 var attempt;
-var splitAttempt;
-var rl = [];
+var res = [0, 0, 0, 0, 0];
 var table = document.getElementsByTagName("table")[0];
+
+for (var o = 1; o <= 6; o++) {
+	if (o <= 5) {
+		var tr = document.createElement("TR");
+		tr.setAttribute("id", "tryRow" + o);
+		tr.classList.add("tableRow");
+		tr.classList.add("tryTableRow");
+		var th = document.createElement("TH");
+		th.classList.add("rowTitle");
+		var t = document.createTextNode("Poging " + o);
+		th.appendChild(t);
+		tr.appendChild(th);
+		for (var i = 1; i <= 5; i++) {
+			var td = document.createElement("TD");
+			td.setAttribute("id", "tryRow" + o + "Letter" + i);
+			td.classList.add("tryRowLetter");
+			td.classList.add("tryRow" + o + "Letter");
+			var input = document.createElement("INPUT");
+			input.setAttribute("type", "text");
+			input.setAttribute("id", "tryRow" + o + "Letter" + i + "Input");
+			input.classList.add("tryRowLetterInput");
+			input.classList.add("tryRow" + o + "LetterInput");
+			input.setAttribute("maxlength", "1");
+			td.appendChild(input);
+			if (o > 1) {
+				input.disabled = true;
+			}
+			tr.appendChild(td);
+		}
+	} else if (o > 5) {
+		var tr = document.createElement("TR");
+		tr.setAttribute("id", "answer");
+		tr.classList.add("tableRow");
+		var th = document.createElement("TH");
+		th.setAttribute("id", "answerRowTitle");
+		th.classList.add("rowTitle");
+		var t = document.createTextNode("Antwoord");
+		th.appendChild(t);
+		tr.appendChild(th);
+
+		for (var i = 1; i <= 5; i++) {
+			var td = document.createElement("TD");
+			td.setAttribute("id", "answerLetter" + i);
+			td.classList.add("tryRowLetter");
+			td.classList.add("answerLetter");
+			var input = document.createElement("INPUT");
+			input.setAttribute("type", "text");
+			input.setAttribute("id", "answerLetter" + i + "Input");
+			input.classList.add("tryRowLetterInput");
+			input.classList.add("answerLetterInput");
+			input.setAttribute("maxlength", "1");
+			input.disabled = true;
+			td.appendChild(input);
+			tr.appendChild(td);
+		}
+	}
+	table.appendChild(tr);
+}
+
 var tryRow1Letter1Input = document.getElementById("tryRow1Letter1Input");
 var tryRow1Letter2Input = document.getElementById("tryRow1Letter2Input");
 tryRow1Letter2Input.focus();
@@ -51,22 +109,22 @@ for (var i = 0; i <= 4; i++) {
 for (var i = 0; i <= 4; i++) {
 	rows[i][0].value = chosenWord.charAt(0);
 }
-var usingRowNumber;
-usingRowNumber = 0;
+var usingRowNumber = 0;
+
 table.onkeydown = function (e) {
 	var target = e.srcElement || e.target;
 	var maxLength = target.maxLength;
 	var myLength = target.value.length;
 	if (event.keyCode === 8) {
-		rows[usingRowNumber].indexOf(target).value = "";
+		target.innerHTML = "";
 	}
-	if (myLength >= maxLength && event.keyCode !== 8 || event.keyCode === 39) {
+	if (myLength >= maxLength && event.keyCode !== 8) {
 		var next = rows[usingRowNumber].indexOf(target);
 		next++;
 		if (next < 5) {
 			rows[usingRowNumber][next].select();
 		}
-	} else if (myLength === 0 || event.keyCode === 37) {
+	} else if (myLength === 0 && event.keyCode === 8) {
 		var previous = rows[usingRowNumber].indexOf(target);
 		previous--;
 		if (previous > 0) {
@@ -76,10 +134,11 @@ table.onkeydown = function (e) {
 	if (event.keyCode === 13 && rows[usingRowNumber][0].value.length >= 1 && rows[usingRowNumber][1].value.length >= 1 && rows[usingRowNumber][2].value.length >= 1 && rows[usingRowNumber][3].value.length >= 1 && rows[usingRowNumber][4].value.length >= 1) {
 		combineAttemptLettersAndCompareWithChosenWord();
 	}
-	//	if (target === rows[usingRowNumber][0]) {
-	//		rows[usingRowNumber][0].value = chosenWord.charAt(0);
-	//	}
 };
+
+
+
+
 submitAttempt.onclick = function () {
 	combineAttemptLettersAndCompareWithChosenWord();
 };
@@ -88,101 +147,40 @@ reset.onclick = function () {
 };
 
 function combineAttemptLettersAndCompareWithChosenWord() {
+	res = [0, 0, 0, 0, 0];
 	attempt = "";
 	for (var i = 0; i <= 4; i++) {
 		attempt += rows[usingRowNumber][i].value;
 	}
-	if (attempt.toLowerCase() === chosenWord) {
-		for (i = 0; i <= 4; i++) {
-			rows[usingRowNumber][i].style.backgroundColor = "#fb5454";
-			rows[usingRowNumber][i].disabled = true;
-		}
-		answerLetter1Input.value = chosenWord[0];
-		answerLetter2Input.value = chosenWord[1];
-		answerLetter3Input.value = chosenWord[2];
-		answerLetter4Input.value = chosenWord[3];
-		answerLetter5Input.value = chosenWord[4];
-	} else {
-		splitChosenWord = chosenWord.split("");
-		splitAttempt = attempt.split("");
-		comparSplitWordsRow();
-	}
-}
-var repeatedLettersCount = 0;
-
-function comparSplitWordsRow() {
-	rl = [];
-	for (var r = 0; r <= 4; r++) {
-		if (chosenWord.split(chosenWord[r]).length >= 3) {
-			rl.push(chosenWord[r]);
+	chosenWordCopy = chosenWord.split("");
+	for (var a = 0; a <= 4; a++) {
+		if (attempt[a].toLowerCase() === chosenWordCopy[a]) {
+			res[a] = 2;
+			chosenWordCopy[a] = -1;
 		}
 	}
-	for (var i = 0; i <= 4; i++) {
-		if (splitAttempt[i].toLowerCase() === splitChosenWord[i]) {
-			rows[usingRowNumber][i].style.backgroundColor = "#fb5454";
-			rows[usingRowNumber][i].disabled = true;
-			var n = rows[usingRowNumber].indexOf(rows[usingRowNumber][i].parentElement.previousElementSibling.firstElementChild);
-			if (repeatedLettersCount > 0) {
-				for (; n > 0; n--) {
-					if (rows[usingRowNumber][n].value === splitAttempt[i]) {
-						rows[usingRowNumber][n].style.backgroundColor = "#becfd6";
-						rows[usingRowNumber][n].style.borderRadius = "5px";
-						rows[usingRowNumber][n].disabled = true;
-					}
-				}
-				repeatedLettersCount--;
-				delete rl[rl.indexOf(splitAttempt[i])];
-			}
-		} else if (splitChosenWord.includes(splitAttempt[i].toLowerCase())) {
-			for (var k = 0; k <= 4; k++) {
-				if (chosenWord.split(chosenWord[k]).length >= 3) {
-					//console.log(chosenWord[k]);
-					repeatedLettersCount = chosenWord.split(chosenWord[k]).length - 1;
-				}
-			}
-			var x = rows[usingRowNumber].indexOf(rows[usingRowNumber][i].parentElement.previousElementSibling.firstElementChild);
-			if (repeatedLettersCount > 0) {
-				rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
-				rows[usingRowNumber][i].style.borderRadius = "100%";
-				rows[usingRowNumber][i].disabled = true;
-				delete rl[rl.indexOf(splitAttempt[i])];
-				if (rows[usingRowNumber][x].value === rows[usingRowNumber][i].value) {
-					//console.log(rows[usingRowNumber][i].value + " - multiple letters detected");
-					rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
-					rows[usingRowNumber][i].style.borderRadius = "100%";
-					rows[usingRowNumber][i].disabled = true;
-					delete rl[rl.indexOf(splitAttempt[i])];
-					break;
-				}
-				delete rl[rl.indexOf(splitAttempt[i])];
-			} else {
-				for (; x >= 0; x--) {
-					if (rows[usingRowNumber][x].value === rows[usingRowNumber][i].value) {
-						//console.log(rows[usingRowNumber][i].value + " - multiple letters detected");
-						rows[usingRowNumber][i].style.backgroundColor = "#becfd6";
-						rows[usingRowNumber][i].style.borderRadius = "5px";
-						rows[usingRowNumber][i].disabled = true;
-						break;
-					} else if (splitChosenWord.includes(splitAttempt[i].toLowerCase())) {
-						//console.log(rows[usingRowNumber][i].value + " - no multiple letters detected");
-						rows[usingRowNumber][i].style.backgroundColor = "#cece2a";
-						rows[usingRowNumber][i].style.borderRadius = "100%";
-						rows[usingRowNumber][i].disabled = true;
-						delete rl[rl.indexOf(splitAttempt[i])];
-					}
-				}
-			}
-			repeatedLettersCount--;
-
-		} else {
-			rows[usingRowNumber][i].style.backgroundColor = "#becfd6";
-			rows[usingRowNumber][i].style.borderRadius = "5px";
-			rows[usingRowNumber][i].disabled = true;
+	for (var b = 0; b <= 4; b++) {
+		if (chosenWordCopy.includes(attempt[b].toLowerCase()) && chosenWordCopy[chosenWordCopy.indexOf(attempt[b])] !== -1 && res[b] !== 2) {
+			res[b] = 1;
+			chosenWordCopy[chosenWordCopy.indexOf(attempt[b])] = -1;
 		}
-
+	}
+	for (var c = 0; c <= 4; c++) {
+		if (res[c] === 2) {
+			rows[usingRowNumber][c].style.backgroundColor = "#fb5454";
+			rows[usingRowNumber][c].disabled = true;
+		} else if (res[c] === 1) {
+			rows[usingRowNumber][c].style.backgroundColor = "#cece2a";
+			rows[usingRowNumber][c].style.borderRadius = "100%";
+			rows[usingRowNumber][c].disabled = true;
+		} else if (res[c] === 0) {
+			rows[usingRowNumber][c].style.backgroundColor = "#becfd6";
+			rows[usingRowNumber][c].disabled = true;
+		}
 	}
 	startNewRow();
 }
+
 
 function startNewRow() {
 	usingRowNumber++;
@@ -192,11 +190,16 @@ function startNewRow() {
 		answerLetter3Input.value = chosenWord[2];
 		answerLetter4Input.value = chosenWord[3];
 		answerLetter5Input.value = chosenWord[4];
-		return;
+	} else if (res[0] === 2 && res[1] === 2 && res[2] === 2 && res[3] === 2 && res[4] === 2) {
+		answerLetter1Input.value = chosenWord[0];
+		answerLetter2Input.value = chosenWord[1];
+		answerLetter3Input.value = chosenWord[2];
+		answerLetter4Input.value = chosenWord[3];
+		answerLetter5Input.value = chosenWord[4];
 	} else {
-		for (var i = 0; i <= 4; i++) {
-			rows[usingRowNumber][i].disabled = false;
-			rows[usingRowNumber][i].style.backgroundColor = "#becfd6";
+		for (var d = 0; d <= 4; d++) {
+			rows[usingRowNumber][d].disabled = false;
+			rows[usingRowNumber][d].style.backgroundColor = "#becfd6";
 			rows[usingRowNumber][0].style.backgroundColor = "#fb5454";
 			rows[usingRowNumber][1].focus();
 		}
@@ -246,6 +249,7 @@ function resetGame() {
 	}
 	chosenWord = words[Math.floor(Math.random() * words.length)];
 	console.log(chosenWord);
+	chosenWordCopy = chosenWord.split("");
 	for (cellReset = 0; cellReset <= 4; cellReset++) {
 		rows[cellReset][0].placeholder = chosenWord[0];
 	}
@@ -253,6 +257,13 @@ function resetGame() {
 		rows[cellReset][0].value = chosenWord[0];
 	}
 	usingRowNumber = 0;
+	tryRow1Letter2Input.focus();
 }
 
-//var rl = [];
+//old
+//rl = [];
+//	for (var r = 0; r <= 4; r++) {
+//		if (chosenWord.split(chosenWord[r]).length >= 3) {
+//			rl.push(chosenWord[r]);
+//		}
+//	}
