@@ -1,0 +1,53 @@
+/* CSS Document */
+/*
+rood: #fb5454
+geel: #cece2a
+groen: #4fca4f
+*/
+
+#title {
+	color: #d0dee4;
+	text-shadow: 1px 1px 0 #a7b2b7, 2px 2px 0 #5a6063, 3px 3px 0 #5c6265, 4px 4px 0 #646b6d, 5px 5px 0 #636a6d, 6px 6px 0 #70787b, 7px 7px 0 #616b6f;
+}
+.resAnn {
+	color: #d0dee4;
+	text-shadow: 1px 1px 0 #a7b2b7, 2px 2px 0 #5a6063, 3px 3px 0 #5c6265, 4px 4px 0 #646b6d, 5px 5px 0 #636a6d, 6px 6px 0 #70787b, 7px 7px 0 #616b6f;
+}
+body {
+	background-color: #B24C4C;
+}
+#themeDropDownMenu {
+	background-color: #400909;
+	color: white;
+}
+#themeDropDownMenuUL {
+	background-color: #400909;
+}
+th.rowTitle {
+	color: #ff6c6c;
+}
+.tryRowLetterInput {
+	background-color: #bfb2b2;
+	color: white;
+}
+.answerLetterInput {
+	background-color: #867070 !important;
+	color: white;
+}
+#tryRow1Letter1Input, #tryRow2Letter1Input, #tryRow3Letter1Input, #tryRow4Letter1Input, #tryRow5Letter1Input {
+	background-color: #6DB625;
+}
+#tryRow1Letter1Input:disabled, #tryRow2Letter1Input:disabled, #tryRow3Letter1Input:disabled, #tryRow4Letter1Input:disabled, #tryRow5Letter1Input:disabled {
+	background-color: #467319;
+}
+.tryRowLetterInput:disabled {
+	background-color: #5a4546;
+}
+button#submitAttempt, #reset {
+	background-color: #481f1f;
+	color: #daf0f7;
+}
+button#submitAttempt:active, #reset:active {
+	background-color: #311313;
+	color: #daf0f7;
+}

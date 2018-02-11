@@ -2,23 +2,31 @@
 <html>
 <head>
 	<title>Lingo!</title>
-	
-	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="style.css">
+	<link id="colorStyleSheet" rel="stylesheet" href="styleB.css">
 </head>
 <body>
-	
+	<div id="resAnnContainer">
+		<div id="themeDropDownMenu">
+			<span id="themeDropDownMenuButton">Theme</span>
+			<ul id="themeDropDownMenuUL">
+				<li class="themechoice" onClick="blueTheme()">Blue</li>
+				<li class="themechoice" onClick="redTheme()">Red</li>
+			</ul>
+		</div>
+		<h1 id="title">Lingo</h1>
+		<h1 id="klopt" class="resAnn">Klopt</h1>
+		<h1 id="bijna" class="resAnn">Bijna</h1>
+		<h1 id="nein" class="resAnn">Daar Klopt Geen Kut Van</h1>
+	</div>
 	<table>
-		
+		<!--Element are generated automatically by javascript-->
 	</table>
 	<div id="buttonsContainer">
 		<button id="submitAttempt">Check</button>
 		<button id="reset">Reset</button>
 	</div>
-	
-	
 	<script src="words-nl.js" type="text/javascript" ></script>
 	<script src="game.js" type="text/javascript" ></script>
-	
 </body>
 </html>

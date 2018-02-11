@@ -4,8 +4,16 @@ console.log(chosenWord);
 var chosenWordCopy = chosenWord.split("");
 var attempt;
 var res = [0, 0, 0, 0, 0];
+var colors = {
+	text: "#d0dee4",
+	correctLetter: "#fb5454",
+	letterInWord: "#cece2a",
+	empty: "#becfd6",
+	correctLetterD: "#8a2d2d",
+	emptyD: "#585e61",
+	answer: "#9c9c9c"
+};
 var table = document.getElementsByTagName("table")[0];
-
 for (var o = 1; o <= 6; o++) {
 	if (o <= 5) {
 		var tr = document.createElement("TR");
@@ -64,6 +72,10 @@ for (var o = 1; o <= 6; o++) {
 	table.appendChild(tr);
 }
 
+var title = document.getElementById("title");
+var klopt = document.getElementById("klopt");
+var bijna = document.getElementById("bijna");
+var nein = document.getElementById("nein");
 var tryRow1Letter1Input = document.getElementById("tryRow1Letter1Input");
 var tryRow1Letter2Input = document.getElementById("tryRow1Letter2Input");
 tryRow1Letter2Input.focus();
@@ -135,12 +147,10 @@ table.onkeydown = function (e) {
 		combineAttemptLettersAndCompareWithChosenWord();
 	}
 };
-
-
-
-
 submitAttempt.onclick = function () {
-	combineAttemptLettersAndCompareWithChosenWord();
+	if (rows[usingRowNumber][0].value.length >= 1 && rows[usingRowNumber][1].value.length >= 1 && rows[usingRowNumber][2].value.length >= 1 && rows[usingRowNumber][3].value.length >= 1 && rows[usingRowNumber][4].value.length >= 1) {
+		combineAttemptLettersAndCompareWithChosenWord();
+	}
 };
 reset.onclick = function () {
 	resetGame();
@@ -167,20 +177,19 @@ function combineAttemptLettersAndCompareWithChosenWord() {
 	}
 	for (var c = 0; c <= 4; c++) {
 		if (res[c] === 2) {
-			rows[usingRowNumber][c].style.backgroundColor = "#fb5454";
+			rows[usingRowNumber][c].style.backgroundColor = colors.correctLetter;
 			rows[usingRowNumber][c].disabled = true;
 		} else if (res[c] === 1) {
-			rows[usingRowNumber][c].style.backgroundColor = "#cece2a";
+			rows[usingRowNumber][c].style.backgroundColor = colors.letterInWord;
 			rows[usingRowNumber][c].style.borderRadius = "100%";
 			rows[usingRowNumber][c].disabled = true;
 		} else if (res[c] === 0) {
-			rows[usingRowNumber][c].style.backgroundColor = "#becfd6";
+			rows[usingRowNumber][c].style.backgroundColor = colors.empty;
 			rows[usingRowNumber][c].disabled = true;
 		}
 	}
 	startNewRow();
 }
-
 
 function startNewRow() {
 	usingRowNumber++;
@@ -190,18 +199,48 @@ function startNewRow() {
 		answerLetter3Input.value = chosenWord[2];
 		answerLetter4Input.value = chosenWord[3];
 		answerLetter5Input.value = chosenWord[4];
+		if (res[0] === 2 && res[1] === 2 && res[2] === 2 && res[3] === 2 && res[4] === 2) {
+			title.style.opacity = "0";
+			klopt.style.opacity = "1";
+			bijna.style.opacity = "0";
+			nein.style.opacity = "0";
+		} else if (res[0] === 0 && res[1] === 0 && res[2] === 0 && res[3] === 0 && res[4] === 0) {
+			klopt.style.opacity = "0";
+			bijna.style.opacity = "0";
+			nein.style.opacity = "1";
+		} else {
+			title.style.opacity = "0";
+			klopt.style.opacity = "0";
+			bijna.style.opacity = "1";
+			nein.style.opacity = "0";
+		}
 	} else if (res[0] === 2 && res[1] === 2 && res[2] === 2 && res[3] === 2 && res[4] === 2) {
 		answerLetter1Input.value = chosenWord[0];
 		answerLetter2Input.value = chosenWord[1];
 		answerLetter3Input.value = chosenWord[2];
 		answerLetter4Input.value = chosenWord[3];
 		answerLetter5Input.value = chosenWord[4];
+		title.style.opacity = "0";
+		klopt.style.opacity = "1";
+		bijna.style.opacity = "0";
+		nein.style.opacity = "0";
 	} else {
 		for (var d = 0; d <= 4; d++) {
 			rows[usingRowNumber][d].disabled = false;
-			rows[usingRowNumber][d].style.backgroundColor = "#becfd6";
-			rows[usingRowNumber][0].style.backgroundColor = "#fb5454";
+			rows[usingRowNumber][d].style.backgroundColor = colors.empty;
+			rows[usingRowNumber][0].style.backgroundColor = colors.correctLetter;
 			rows[usingRowNumber][1].focus();
+		}
+		if (res[0] === 0 && res[1] === 0 && res[2] === 0 && res[3] === 0 && res[4] === 0) {
+			title.style.opacity = "0";
+			klopt.style.opacity = "0";
+			bijna.style.opacity = "0";
+			nein.style.opacity = "1";
+		} else {
+			title.style.opacity = "0";
+			klopt.style.opacity = "0";
+			bijna.style.opacity = "1";
+			nein.style.opacity = "0";
 		}
 	}
 
@@ -222,31 +261,35 @@ function resetGame() {
 			rows[rowReset][cellReset].value = "";
 		}
 	}
-
 	for (rowReset = 4; rowReset >= 0; rowReset--) {
 		for (cellReset = 4; cellReset >= 0; cellReset--) {
 			if (cellReset === 0) {
 				rows[rowReset][cellReset].disabled = true;
 				rows[rowReset][cellReset].style.borderRadius = "5px";
 				if (rowReset === 0) {
-					rows[rowReset][cellReset].style.backgroundColor = "#fb5454";
+					rows[rowReset][cellReset].disabled = false;
+					rows[rowReset][cellReset].style.backgroundColor = colors.correctLetter;
 					rows[rowReset][cellReset].style.borderRadius = "5px";
 				} else {
-					rows[rowReset][cellReset].style.backgroundColor = "#8a2d2d";
+					rows[rowReset][cellReset].style.backgroundColor = colors.correctLetterD;
 					rows[rowReset][cellReset].style.borderRadius = "5px";
 				}
 			} else if (rowReset === 0) {
 				rows[rowReset][cellReset].disabled = false;
-				rows[rowReset][cellReset].style.backgroundColor = "#becfd6";
+				rows[rowReset][cellReset].style.backgroundColor = colors.empty;
 				rows[rowReset][cellReset].style.borderRadius = "5px";
 			} else {
 				rows[rowReset][cellReset].disabled = true;
-				rows[rowReset][cellReset].style.backgroundColor = "#585e61";
+				rows[rowReset][cellReset].style.backgroundColor = colors.emptyD;
 				rows[rowReset][cellReset].style.borderRadius = "5px";
 				rows[rowReset][cellReset].style.borderRadius = "5px";
 			}
 		}
 	}
+	title.style.opacity = "1";
+	klopt.style.opacity = "0";
+	bijna.style.opacity = "0";
+	nein.style.opacity = "0";
 	chosenWord = words[Math.floor(Math.random() * words.length)];
 	console.log(chosenWord);
 	chosenWordCopy = chosenWord.split("");
@@ -259,11 +302,26 @@ function resetGame() {
 	usingRowNumber = 0;
 	tryRow1Letter2Input.focus();
 }
+function blueTheme() {
+	colors.text = "#d0dee4";
+	colors.correctLetter = "#fb5454";
+	colors.letterInWord = "#cece2a";
+	colors.empty = "#becfd6";
+	colors.correctLetterD = "#8a2d2d";
+	colors.emptyD = "#585e61";
+	colors.answer = "#9c9c9c";
+	colorStyleSheet.href = "styleB.css";
+	resetGame();
+}
+function redTheme() {
+	colors.text = "#ff6c6c";
+	colors.correctLetter = "#6DB625";
+	colors.letterInWord = "#cece2a";
+	colors.empty = "#bfb2b2";
+	colors.correctLetterD = "#467319";
+	colors.emptyD = "#5a4546";
+	colors.answer = "#867070";
+	colorStyleSheet.href = "styleR.css";
+	resetGame();
+}
 
-//old
-//rl = [];
-//	for (var r = 0; r <= 4; r++) {
-//		if (chosenWord.split(chosenWord[r]).length >= 3) {
-//			rl.push(chosenWord[r]);
-//		}
-//	}
