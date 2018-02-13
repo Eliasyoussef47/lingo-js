@@ -1,4 +1,4 @@
-/* global words*/
+/* global words */
 var chosenWord = words[Math.floor(Math.random() * words.length)];
 console.log(chosenWord);
 var chosenWordCopy = chosenWord.split("");
@@ -72,6 +72,7 @@ for (var o = 1; o <= 6; o++) {
 	table.appendChild(tr);
 }
 
+var colorStyleSheet = document.getElementById("colorStyleSheet");
 var title = document.getElementById("title");
 var klopt = document.getElementById("klopt");
 var bijna = document.getElementById("bijna");
